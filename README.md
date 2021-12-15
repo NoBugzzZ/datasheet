@@ -39,6 +39,14 @@
 						"title": "纬度"
 					}
 				}
+			},
+			"basicarray": {
+				"type": "array",
+				"title": "集合1",
+				"items": {
+					"type": "string",
+					"title": "STR"
+				}
 			}
 		}
 	},
@@ -55,12 +63,13 @@
 				"col": 2
 			}
 		},
-			"score":{
-					"ui:location": {
+		"score": {
+			"ui:location": {
 				"row": 1,
-				"col": 3
+				"col": 3,
+				"colSpan": 2
 			}
-			},
+		},
 		"gender": {
 			"ui:location": {
 				"row": 2,
@@ -84,6 +93,21 @@
 				"ui:location": {
 					"row": 3,
 					"col": 2
+				}
+			}
+		},
+		"basicarray": {
+			"ui:location": {
+				"row": 4,
+				"col": 1,
+				"rowSpan": 4,
+				"colSpan": 3
+			},
+			"items": {
+				"ui:location": {
+					"rowSpan": 1,
+					"colSpan": 1,
+					"col": 1
 				}
 			}
 		}
