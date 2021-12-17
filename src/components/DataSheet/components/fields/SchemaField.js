@@ -1,4 +1,5 @@
 import { getSchemaType } from "../../utils"
+import PropTypes from 'prop-types';
 
 const COMPONENT_TYPES = {
   array: 'ArrayField',
@@ -17,6 +18,12 @@ function getFieldComponent(schema, uiSchema, fields) {
     : fields['UnsupportedField']
   )
 }
+
+/**
+ * 
+ * @param {scheam,uiSchema,formData,register,onChange,onCellChange}
+ */
+
 
 export default function SchemaField(props) {
   const {

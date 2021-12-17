@@ -60,7 +60,6 @@ export default function () {
           <Title>SchemaForm</Title>
           <CustomForm
             onSubmit={({ formData:newFormData }) => {
-              console.log(newFormData)
               setFormData(newFormData)
             }}
             schema={schema}

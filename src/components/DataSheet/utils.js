@@ -59,12 +59,22 @@ export function getLocation(uiSchema) {
   return null
 }
 
-const START_ROW_INDEX = 0
-const START_COL_INDEX = 0
+const START_ROW_INDEX = 1
+const START_COL_INDEX = 1
 
 export const CELL_OPTIONS = {
   width: 100
 }
+
+const ROW_BAR_CELL_OPTIONS={
+  readOnly:true,
+}
+
+const COL_BAR_CELL_OPTIONS={
+  width: 30,
+  readOnly:true,
+}
+
 
 export function addCell(grid, {
   context: {
@@ -90,7 +100,19 @@ export function addCell(grid, {
     grid[rowIndex].push({ ...CELL_OPTIONS })
   }
   grid[rowIndex][colIndex] = { ...CELL_OPTIONS, ...cellInfo, rowSpan, colSpan, value, label }
+
   completeGrid(grid)
+
+  for(let i=0;i<START_ROW_INDEX;i++){
+    for(let j=START_COL_INDEX;j<grid[i].length;j++){
+      grid[i][j]={...grid[i][j],...ROW_BAR_CELL_OPTIONS}
+    }
+  }
+  for(let i=0;i<grid.length;i++){
+    for(let j=0;j<START_COL_INDEX;j++){
+      grid[i][j]={...grid[i][j],...COL_BAR_CELL_OPTIONS}
+    }
+  }
 }
 
 export function completeGrid(grid) {
@@ -137,4 +159,20 @@ export function completeGrid(grid) {
     }
   }
 
+}
+
+export function getDefaultFormState(schema){
+  const defaults=computeDefaults(schema)
+  return defaults
+}
+
+export function computeDefaults(schema){
+  switch(getSchemaType(schema)){
+    case "object":
+      return {}
+    case "array":
+      return []
+    default:
+      return ""
+  }
 }

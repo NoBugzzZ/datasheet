@@ -3,6 +3,7 @@ import ReactDataSheet from 'react-datasheet';
 import 'react-datasheet/lib/react-datasheet.css';
 import _ from 'lodash';
 import { getDefaultRegister, addCell } from '../utils';
+import PropTypes from 'prop-types';
 
 export default function DataSheet(props) {
   const [grid, setGrid] = useState([])
@@ -13,13 +14,13 @@ export default function DataSheet(props) {
     const register = getDefaultRegister()
     const _SchemaField = register.fields.SchemaField
     _SchemaField({
-      ...props,
+      ..._.cloneDeep(props),
       register,
       onChange,
       onCellChange,
-      formData,
+      formData: _.cloneDeep(formData),
     })
-  }, [formData,props])
+  }, [formData, props])
 
   const onCellChange = (cell) => {
     setGrid((prev) => {
@@ -43,7 +44,6 @@ export default function DataSheet(props) {
       return formData
     })
   }
-
   return (
     <>
       <ReactDataSheet
@@ -60,6 +60,10 @@ export default function DataSheet(props) {
       }}>submit</button>
     </>
   )
+}
 
-
+DataSheet.propTypes = {
+  schema: PropTypes.object.isRequired,
+  uiSchema: PropTypes.object,
+  formData: PropTypes.any,
 }

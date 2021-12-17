@@ -2,7 +2,6 @@ import React from "react"
 import { getWidget, getLocation } from "../../utils"
 
 export default function StringField(props) {
-  console.log(props)
   const {
     schema,
     uiSchema,

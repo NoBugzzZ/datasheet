@@ -1,8 +1,7 @@
 ## 演示例子
- 
+schema
 ```
-{
-	"schema": {
+ {
 		"type": "object",
 		"title": "datasheet",
 		"properties": {
@@ -47,10 +46,44 @@
 					"type": "string",
 					"title": "STR"
 				}
+			},
+			"objectarray": {
+				"type": "array",
+				"title": "集合2",
+				"items": {
+					"type": "object",
+					"title": "OBJECT",
+					"properties": {
+						"name": {
+							"type": "string",
+							"title": "名称"
+						},
+						"age": {
+							"type": "integer",
+							"title": "年龄"
+						}
+					}
+				}
+			},
+			"arrayarray": {
+				"type": "array",
+				"title": "集合3",
+				"items": {
+					"type": "array",
+					"title": "集合4",
+					"items": {
+						"type": "string",
+						"title": "名称"
+					}
+				}
 			}
 		}
-	},
-	"uiSchema": {
+	}
+```
+
+uiSchema
+```
+{
 		"name": {
 			"ui:location": {
 				"row": 1,
@@ -110,7 +143,52 @@
 					"col": 1
 				}
 			}
+		},
+		"objectarray": {
+			"ui:location": {
+				"row": 8,
+				"col": 1,
+				"rowSpan": 4,
+				"colSpan": 3
+			},
+			"items": {
+				"name": {
+					"ui:location": {
+						"rowSpan": 1,
+						"colSpan": 1,
+						"col": 1
+					}
+				},
+				"age": {
+					"ui:location": {
+						"rowSpan": 1,
+						"colSpan": 1,
+						"col": 2
+					}
+				}
+			}
+		},
+		"arrayarray": {
+			"ui:location": {
+				"row": 12,
+				"col": 1,
+				"rowSpan": 4,
+				"colSpan": 3
+			},
+			"items": {
+				"ui:location": {
+					"col": 1,
+					"rowSpan": 4,
+					"colSpan": 3
+				},
+				"items": {
+					"ui:location": {
+						"col": 1,
+						"rowSpan": 1,
+						"colSpan": 3
+					}
+				}
+			}
 		}
 	}
-}
 ```
