@@ -192,3 +192,20 @@ uiSchema
 		}
 	}
 ```
+
+```
+{
+    "type":"object",
+    "properties":{
+        "name":{
+            "type":"string"
+        }
+    }
+}
+
+{
+    "name":{
+        "ui:widget":"cache-input"
+    }
+}
+```

@@ -11,11 +11,11 @@ const widgetMap = {
   integer: {
     input: 'NumberInputWidget'
   },
-  boolean:{
+  boolean: {
     input: 'BooleanInputWidget'
   },
-  array:{
-    datasheet:'ArrayDataSheetWidget'
+  array: {
+    datasheet: 'ArrayDataSheetWidget'
   }
 }
 
@@ -63,18 +63,156 @@ const START_ROW_INDEX = 1
 const START_COL_INDEX = 1
 
 export const CELL_OPTIONS = {
-  width: 100
+  width: 100,
 }
 
-const ROW_BAR_CELL_OPTIONS={
-  readOnly:true,
+const ROW_BAR_CELL_OPTIONS = {
+  readOnly: true,
 }
 
-const COL_BAR_CELL_OPTIONS={
+const COL_BAR_CELL_OPTIONS = {
   width: 30,
-  readOnly:true,
+  readOnly: true,
 }
 
+const cells = [
+  { location: { row: 1, col: 1, rowSpan: 1, colSpan: 1 }, value: null, label: null, component: null },
+  { location: { row: 2, col: 1, rowSpan: 1, colSpan: 1 }, value: null, label: null, component: null },
+]
+
+
+
+const M = [
+  [{ type: 'source', rowSpan: 1, colSpan: 2, cellInfo: { rowSpan: 1, colSpan: 2, value: null, label: null, component: null } }, { type: 'target', row: 0, col: 0 }]
+]
+
+export function captureMatrix(matrix, {
+  readOnly,
+  context: {
+    location: {
+      row,
+      col,
+      rowSpan,
+      colSpan
+    },
+    value,
+    label,
+  },
+  component
+}) {
+  const matrixMaxRowIndex = matrix.length - 1
+  const matrixMaxColIndex = matrixMaxRowIndex > -1 ?
+    matrix[matrixMaxRowIndex].length - 1 : -1
+  const rowIndex = row - 1
+  const colIndex = col - 1
+  const lessRowIndex = rowIndex + rowSpan - 1 < matrixMaxRowIndex ?
+    rowIndex + rowSpan - 1 : matrixMaxRowIndex
+  const lessColIndex = colIndex + colSpan - 1 < matrixMaxColIndex ?
+    colIndex + colSpan - 1 : matrixMaxColIndex
+  let hasConflict = false
+  //检查新的cell在矩阵中是否有范围冲突
+  if (matrixMaxRowIndex >= rowIndex && matrixMaxColIndex >= colIndex) {
+    for (let i = rowIndex; i <= lessRowIndex; i++) {
+      for (let j = colIndex; j <= lessColIndex; j++) {
+        const { type } = matrix[i][j]
+        if (type === 'source' || type === 'target') {
+          hasConflict = true
+          break
+        }
+      }
+      if (hasConflict) break
+    }
+  }
+  const moreRowIndex = rowIndex + rowSpan - 1 > matrixMaxRowIndex ?
+    rowIndex + rowSpan - 1 : matrixMaxRowIndex
+  const moreColIndex = colIndex + colSpan - 1 > matrixMaxColIndex ?
+    colIndex + colSpan - 1 : matrixMaxColIndex
+  let newMatrix = _.cloneDeep(matrix)
+  //若无冲突，则可以将cell添加到矩阵
+  if (!hasConflict) {
+    for (let i = matrixMaxRowIndex + 1; i <= moreRowIndex; i++) {
+      newMatrix.push([])
+    }
+    for (let i = 0; i <= moreRowIndex; i++) {
+      const currentColIndex = newMatrix[i].length - 1
+      for (let j = currentColIndex + 1; j <= moreColIndex; j++) {
+        newMatrix[i].push({ type: 'empty' })
+      }
+    }
+
+    if (newMatrix.length - 1 !== moreRowIndex) {
+      console.log(`newMatrix.length=${newMatrix.length},moreRowIndex=${moreRowIndex}`)
+    }
+    for (let i = 0; i <= newMatrix.length - 1; i++) {
+      if (newMatrix[i].length - 1 !== moreColIndex) {
+        console.log(`newMatrix[i].length=${newMatrix[i].length},moreColIndex=${moreColIndex}`)
+      }
+    }
+
+    for (let i = rowIndex; i <= rowIndex + rowSpan - 1; i++) {
+      for (let j = colIndex; j <= colIndex + colSpan - 1; j++) {
+        if (i === rowIndex && j === colIndex) {
+          newMatrix[i][j] = {
+            type: 'source',
+            rowSpan,
+            colSpan,
+            cellInfo: {
+              readOnly: readOnly ? true : false,
+              rowSpan,
+              colSpan,
+              value,
+              label,
+              component
+            }
+          }
+        } else {
+          newMatrix[i][j] = { type: 'target', row: rowIndex, col: colIndex }
+        }
+      }
+    }
+  }
+  return newMatrix
+}
+
+function addCellToGrid(grid, rowIndex, colIndex, cell) {
+  let newGrid = _.cloneDeep(grid)
+  const gridMaxRowIndex = grid.length - 1
+  for (let i = gridMaxRowIndex + 1; i <= rowIndex; i++) {
+    newGrid.push([])
+  }
+  const gridColIndex = newGrid[rowIndex].length - 1
+  for (let i = gridColIndex + 1; i <= colIndex; i++) {
+    newGrid[rowIndex][i] = { ...CELL_OPTIONS }
+  }
+  newGrid[rowIndex][colIndex] = { ...newGrid[rowIndex][colIndex], ...cell }
+  return newGrid
+}
+
+export function matrixToGrid(matrix) {
+  let grid = []
+  const matrixMaxRowIndex = matrix.length - 1
+  const matrixMaxColIndex = matrixMaxRowIndex > -1 ?
+    matrix[matrixMaxRowIndex].length - 1 : -1
+  if (matrixMaxRowIndex >= 0 && matrixMaxColIndex >= 0) {
+    for (let i = 0; i <= matrixMaxRowIndex; i++) {
+      let targetCount = 0
+      for (let j = 0; j <= matrixMaxColIndex; j++) {
+        const { type } = matrix[i][j]
+        if (type === 'source') {
+          const { cellInfo } = matrix[i][j]
+          grid = addCellToGrid(grid, i, j - targetCount, cellInfo)
+        } else if (type === 'target') {
+          targetCount++
+        } else if (type === 'empty') {
+          grid = addCellToGrid(grid, i, j - targetCount, {})
+        } else {
+          console.log(`matrix[${i}][${j}].type===${type}`)
+        }
+      }
+    }
+  }
+  return grid
+}
 
 export function addCell(grid, {
   context: {
@@ -103,14 +241,14 @@ export function addCell(grid, {
 
   completeGrid(grid)
 
-  for(let i=0;i<START_ROW_INDEX;i++){
-    for(let j=START_COL_INDEX;j<grid[i].length;j++){
-      grid[i][j]={...grid[i][j],...ROW_BAR_CELL_OPTIONS}
+  for (let i = 0; i < START_ROW_INDEX; i++) {
+    for (let j = START_COL_INDEX; j < grid[i].length; j++) {
+      grid[i][j] = { ...grid[i][j], ...ROW_BAR_CELL_OPTIONS }
     }
   }
-  for(let i=0;i<grid.length;i++){
-    for(let j=0;j<START_COL_INDEX;j++){
-      grid[i][j]={...grid[i][j],...COL_BAR_CELL_OPTIONS}
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < START_COL_INDEX; j++) {
+      grid[i][j] = { ...grid[i][j], ...COL_BAR_CELL_OPTIONS }
     }
   }
 }
@@ -161,13 +299,13 @@ export function completeGrid(grid) {
 
 }
 
-export function getDefaultFormState(schema){
-  const defaults=computeDefaults(schema)
+export function getDefaultFormState(schema) {
+  const defaults = computeDefaults(schema)
   return defaults
 }
 
-export function computeDefaults(schema){
-  switch(getSchemaType(schema)){
+export function computeDefaults(schema) {
+  switch (getSchemaType(schema)) {
     case "object":
       return {}
     case "array":

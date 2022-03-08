@@ -11,7 +11,6 @@ export default function BooleanField(props) {
     name,
     onChange,
   } = props
-
   const { widgets } = register
   const { title } = schema
   let defaultWidget = 'input'
@@ -21,12 +20,12 @@ export default function BooleanField(props) {
     onCellChange({
       component:
         <Widget
-          value={formData}
+          value={props.formData}
           onChange={onChange}
         />,
       context: {
         location,
-        value: formData,
+        value: props.formData,
         label: title ? title : name
       }
     })

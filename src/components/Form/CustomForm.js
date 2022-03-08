@@ -4,6 +4,7 @@ import CustomDate from "./CustomDate";
 import CustomMonth from "./CustomMonth";
 import CustomFile from "./CumtomFile"
 import Form from '@nobugzzz/rjsf-material-ui'
+import AutocompleteWidget from './AutocompleteWidget';
 
 {/**usage
 
@@ -31,6 +32,7 @@ export default function (props) {
     "year-month-date": CustomDate,
     "month-date": CustomMonth,
     "base64-file": CustomFile,
+    "cache-input":AutocompleteWidget,
   }
 
 

@@ -61,6 +61,7 @@ export default function () {
           <CustomForm
             onSubmit={({ formData:newFormData }) => {
               setFormData(newFormData)
+              alert(JSON.stringify(newFormData,null,2))
             }}
             schema={schema}
             uiSchema={uiSchema}
