@@ -1,5 +1,6 @@
 import fields from "./components/fields";
 import widgets from "./components/widgets";
+import functions from "./functions"
 
 const widgetMap = {
   string: {
@@ -22,7 +23,8 @@ const widgetMap = {
 export function getDefaultRegister() {
   return {
     fields,
-    widgets
+    widgets,
+    functions,
   }
 }
 
@@ -312,5 +314,24 @@ export function computeDefaults(schema) {
       return []
     default:
       return ""
+  }
+}
+
+export function parsePath(path, rootFormData) {
+  return rootFormData[path]
+}
+
+export function getFormData(schema, rootSchema, rootFormData, register) {
+  const { dependencies, function: functionName } = schema;
+  let dependencyValues = []
+  dependencies.forEach((dependency) => {
+    dependencyValues.push(parsePath(dependency, rootFormData))
+  })
+  const {functions}=register
+  if(functions.hasOwnProperty(functionName)){
+    const func=functions[functionName]
+    return func(...dependencyValues)
+  }else{
+    return null
   }
 }

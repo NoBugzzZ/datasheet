@@ -10,7 +10,7 @@ export default function NumberInputWidget(props) {
       value={value?value:''}
       style={{ width: '100%', height: '100%' }}
       onChange={(e) => {
-        onChange(e.target.value)
+        onChange(Number(e.target.value))
       }}
       type='number'
     >

@@ -11,6 +11,7 @@ export default function DataSheet(props) {
   const [formData, setFormData] = useState(props.formData)
 
   useEffect(() => {
+    console.log(formData)
     setMatrix([])
     const register = getDefaultRegister()
     const _SchemaField = register.fields.SchemaField
@@ -20,6 +21,8 @@ export default function DataSheet(props) {
       onChange,
       onCellChange,
       formData: _.cloneDeep(formData),
+      rootFormData:_.cloneDeep(formData),
+      rootSchema:props.schema?_.cloneDeep(props.schema):{},
     })
   }, [formData, props])
 
