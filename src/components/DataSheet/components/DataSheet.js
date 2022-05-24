@@ -21,8 +21,8 @@ export default function DataSheet(props) {
       onChange,
       onCellChange,
       formData: _.cloneDeep(formData),
-      rootFormData:_.cloneDeep(formData),
-      rootSchema:props.schema?_.cloneDeep(props.schema):{},
+      rootFormData: _.cloneDeep(formData),
+      rootSchema: props.schema ? _.cloneDeep(props.schema) : {},
     })
   }, [formData, props])
 
@@ -38,29 +38,27 @@ export default function DataSheet(props) {
   }
 
   const onChange = (changedFormData) => {
-    setFormData((prev) => {
-      if (typeof changedFormData === 'object' &&
-        !Array.isArray(changedFormData) &&
-        changedFormData !== null
-      ) {
-        return {
-          ...prev,
-          ...changedFormData
-        }
-      }
-      return changedFormData
-    })
+    console.log(changedFormData)
+    // setFormData((prev) => {
+    //   if (typeof changedFormData === 'object' &&
+    //     !Array.isArray(changedFormData) &&
+    //     changedFormData !== null
+    //   ) {
+    //     return {
+    //       ...prev,
+    //       ...changedFormData
+    //     }
+    //   }
+    //   return changedFormData
+    // })
   }
+  console.log("render")
   return (
     <>
       <ReactDataSheet
         data={matrixToGrid(matrix)}
-        valueRenderer={cell => cell.label}
-      // dataRenderer={cell => {
-      //   var { value } = cell
-      //   value = value ? value : ''
-      //   return value
-      // }}
+        valueRenderer={cell => cell.component}
+        // dataRenderer={cell => cell.component}
       />
       <button style={{ height: '40px', width: '70px', margin: '20px' }} onClick={() => {
         alert(JSON.stringify(formData))

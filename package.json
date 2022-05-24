@@ -3,7 +3,7 @@
   "version": "4.0.0",
   "private": true,
   "scripts": {
-    "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
+    "start": "react-scripts start",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "DISABLE_ESLINT_PLUGIN=true react-scripts test",
     "eject": "DISABLE_ESLINT_PLUGIN=true react-scripts eject"
@@ -35,9 +35,10 @@
     "node-fetch": "^2.6.1",
     "prop-types": "^15.7.2",
     "querystring": "^0.2.1",
-    "react": "latest",
+    "react": "^16.14.0",
     "react-datasheet": "^1.4.9",
-    "react-dom": "latest",
+    "react-dom": "^16.14.0",
+    "react-scripts": "^5.0.0",
     "recharts": "^2.0.9",
     "uuid": "^8.3.2",
     "vis-data": "^7.1.2",

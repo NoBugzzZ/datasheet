@@ -4,6 +4,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import theme from "./theme";
 import Layout from "./Layout";
+import DataSheetPage from "./pages/DataSheetPage"
 function disableReactDevTools() {
   // Check if the React Developer Tools global hook exists
   if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ !== "object") {
@@ -37,8 +38,9 @@ if (
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-    <CssBaseline />
-    <Layout />
+    {/* <CssBaseline />
+    <Layout /> */}
+    <DataSheetPage></DataSheetPage>
   </ThemeProvider>,
   document.querySelector("#root")
 );
